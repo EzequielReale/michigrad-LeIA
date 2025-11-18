@@ -1,3 +1,9 @@
+# Imágenes / archivos generados
+grafo_xor_lineal
+grafo_xor_lineal.png
+grafo_xor_nonlineal
+grafo_xor_nonlineal.png
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
