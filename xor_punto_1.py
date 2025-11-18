@@ -38,4 +38,7 @@ for i in range(50):
     
     print(f"Paso {i+1} | Pérdida: {loss.data:.4f}")
 
+print(f"Pérdida final: {loss.data:.4f}")
+print("Predicciones finales:", [y.data for y in ypred])
+
 show_graph(loss).render('grafo_xor_lineal', format='png')

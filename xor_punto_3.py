@@ -42,9 +42,9 @@ for k in range(100): # Esto lo voy a ir ajustando qsy
         p.data += -lr * p.grad
     
     if k % 10 == 0:
-        print(f"Step {k} | Loss: {loss.data:.4f}")
+        print(f"Paso {k} | Pérdida: {loss.data:.4f}")
 
-print(f"Final Loss: {loss.data:.4f}")
+print(f"Pérdida final: {loss.data:.4f}")
 print("Predicciones finales:", [y.data for y in ypred])
 
 show_graph(loss).render('grafo_xor_nonlineal', format='png')
