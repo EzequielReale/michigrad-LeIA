@@ -63,6 +63,41 @@ class Value:
 
         return out
 
+    def tanh(self):
+        x = self.data
+        # Fórmula de tanh: (e^(2x) - 1) / (e^(2x) + 1)
+        t = (math.exp(2*x) - 1)/(math.exp(2*x) + 1)
+        out = Value(t, (self, ), 'tanh')
+        
+        def _backward():
+            # Derivada de tanh es: 1 - tanh^2
+            self.grad += (1 - t**2) * out.grad
+        out._backward = _backward
+        return out
+
+    def sigmoid(self):
+        x = self.data
+        # Fórmula sigmoide: 1 / (1 + e^-x)
+        try:
+            s = 1 / (1 + math.exp(-x))
+        except OverflowError:
+            s = 0 if x < 0 else 1 
+            
+        out = Value(s, (self, ), 'sigmoid')
+        
+        def _backward():
+            # Derivada de sigmoide es: s * (1 - s)
+            self.grad += (s * (1 - s)) * out.grad
+        out._backward = _backward
+        return out
+    
+    def exp(self):
+        x = self.data
+        out = Value(math.exp(x), (self, ), 'exp')
+        def _backward():
+            self.grad += out.data * out.grad 
+        out._backward = _backward
+        return out
 
     def backward(self):
 

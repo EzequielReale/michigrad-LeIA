@@ -44,9 +44,9 @@ class Layer(Module):
 
 class MLP(Module):
 
-    def __init__(self, nin, nouts):
+    def __init__(self, nin, nouts, nonlin=True):
         sz = [nin] + nouts
-        self.layers = [Layer(sz[i], sz[i+1], nonlin=i!=len(nouts)-1) for i in range(len(nouts))]
+        self.layers = [Layer(sz[i], sz[i+1], nonlin=nonlin) for i in range(len(nouts))]
 
     def __call__(self, x):
         for layer in self.layers:
