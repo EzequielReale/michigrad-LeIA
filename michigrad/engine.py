@@ -53,16 +53,6 @@ class Value:
 
         return out
 
-    def exp(self):
-        x = self.data
-        out = Value(math.exp(x), (self, ), f'e^{self.data}')
-
-        def _backward():
-          self.grad += out.data * out.grad # NOTE: in the video I incorrectly used = instead of +=. Fixed here.
-        out._backward = _backward
-
-        return out
-
     def tanh(self):
         x = self.data
         # Fórmula de tanh: (e^(2x) - 1) / (e^(2x) + 1)

@@ -1,49 +1,73 @@
-# Michigrad
-Pequeño Autograd con fines educativos.
+# Michigrad - LeIA 2025
+
+Pequeño motor de Autograd con fines educativos, desarrollado como parte del Trabajo Práctico Nº9 de la cátedra de **Lógica e Inteligencia Artificial**.
 
 ![gatite](images/gatite.png)
 
-Clon de Micrograd de [Andrej Karpathy](https://github.com/karpathy/micrograd) y básicamente comparte la misma base de código. Se mejoraron algunos aspectos de la visualización, orientados al curso de Nociones de Deep Learning para Inteligencia Artificial Generativa de Texto de [Purrfect AI](https://purrfectai.online)
+Este proyecto es un fork de una implementación minimalista de backpropagation (basada en [Micrograd](https://github.com/karpathy/micrograd) de Andrej Karpathy), extendido para soportar nuevas funciones de activación y arquitecturas modulares.
 
-## Características
-Michigrad es un motor de cálculo de gradientes para valores escalares. Permite representar valores numéricos envolviendolos en objetos `Value`. Estos objetos soportan algunas de las operaciones análogas a las de los números, como la suma, la multiplicación, la división, la exponenciación, entre otras. Michigrad permite conocer el resultado de aplicar esas operaciones sobre los Values, lo que se conoce como forward pass, pero además permite generar el grafo de operaciones y dependencias necesarios para llegar al Value resultado. Este grafo puede usarse para calcular los gradientes de cualquier Value del grafo con respecto al resultado mediante el algoritmo de backpropagation que Michigrad también implenta. Esta información puede usarse para modificar los pesos W de una red neuronal respecto a una función de perdida L, con el objetivo de minimizar la función de perdida y entrenar la red neuronal.
+### 👥 Integrantes
+* Cestorame, Giuliana María
+* Gerez, Marcos Mateo
+* Reale, Ezequiel Iván
 
-## Uso de Michigrad
+## 🚀 Características y Extensiones
+
+Michigrad permite construir grafos de computación dinámica para calcular gradientes automáticamente. Además de las operaciones escalares básicas, esta versión incluye las siguientes extensiones requeridas por el TP:
+
+* **Nuevas Funciones de Activación:** Se implementaron `Tanh` y `Sigmoid` (Logística) con sus respectivas derivadas para el paso de *backward*, además de la `ReLU` existente.
+* **Arquitectura Modular:** Se extendió la capacidad de construcción de redes mediante clases modulares (disponibles en `michigrad/enhanced_nn.py`) que permiten apilar capas de forma flexible.
+* **Resolución del problema XOR:** Se incluyen scripts de prueba que demuestran la incapacidad de los modelos lineales para resolver problemas no linealmente separables y cómo la incorporación de capas ocultas con no-linealidades resuelve el problema.
+
+## 🛠️ Uso de Michigrad
+
+### Ejemplo básico (Escalares)
 
 ```python
 import numpy as np
 from michigrad.engine import Value
 from michigrad.visualize import show_graph
 
-# Definición de los pesos
-np.random.seed(42)
-W0 = Value(np.random.random(), name='W₀')
-W1 = Value(np.random.random(), name='W₁')
-b = Value(np.random.random(), name='b')
-print(W0)  # imprime Value(data=0.3745401188473625, grad=0, name=W₀)
+# Definición de variables y pesos
+x = Value(0.5, name="x")
+w = Value(0.8, name="w")
+b = Value(0.1, name="b")
 
-# definición del dataset de entrenamiento
-x0 = Value(.5, name="x₀")
-x1 = Value(1., name="x₁")
-y = Value(2., name="y")
+# Forward pass con activación Tanh
+n = x * w + b
+o = n.tanh()
 
-# forward pass
-yhat = x0*W0 + x1*W1 + b
-yhat.name = "ŷ"
-print(yhat)  # imprime Value(data=1.8699783076450025, grad=0, name=ŷ)
+# Backward pass
+o.backward()
 
-L = (y - yhat) ** 2
-L.name = "L"
-print(L)  # imprime Value(data=0.016905640482857615, grad=0, name=L)
+print(f"Gradiente de x: {x.grad}")
+````
 
-# backward pass
-L.backward()
+### Reproducción de Experimentos XOR
 
-print(L)  # imprime Value(data=0.016905640482857615, grad=1, name=L)
-print(W0)  # imprime Value(data=0.3745401188473625, grad=-0.1300216923549975, name=W₀)
+El repositorio incluye dos scripts para demostrar el aprendizaje (o la falta de él) en la función XOR:
 
-# update de los pesos en la dirección contraria al gradiente de los W
+1.  **Modelo Lineal (Falla):**
 
-show_graph(L, rankdir="TB",format="png")
-```
-![graph](images/graph.png)
+    ```bash
+    python xor_punto_1.py
+    ```
+
+    *Muestra cómo una red sin activaciones no lineales no puede reducir la pérdida en el problema XOR.*
+
+2.  **Modelo No-Lineal (Éxito):**
+
+    ```bash
+    python xor_punto_3.py
+    ```
+
+    *Entrena un MLP con capas ocultas y activación Tanh/ReLU, logrando convergencia y resolviendo el problema.*
+
+## 📦 Instalación y Requisitos
+
+1.  Clonar el repositorio.
+2.  Instalar las dependencias:
+    ```bash
+    pip install -r requirements.txt
+    ```
+3.  Para la visualización de grafos es necesario tener instalado **Graphviz** en el sistema.

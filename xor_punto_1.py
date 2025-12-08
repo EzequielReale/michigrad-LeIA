@@ -18,7 +18,8 @@ ys = [Value(-1.0), Value(1.0), Value(1.0), Value(-1.0)]
 
 model = MLP(2, [2, 1], nonlin=False) 
 
-for i in range(50):
+print("Entrenando XOR con MLP lineal...")
+for i in range(500):
     # 1. Forward
     ypred = [model(x) for x in xs]
     
@@ -36,7 +37,8 @@ for i in range(50):
     for p in model.parameters():
         p.data += -learning_rate * p.grad
     
-    print(f"Paso {i+1} | Pérdida: {loss.data:.4f}")
+    if i % 20 == 0:
+        print(f"Paso {i} | Pérdida: {loss.data:.4f}")
 
 print(f"Pérdida final: {loss.data:.4f}")
 print("Predicciones finales:", [y.data for y in ypred])

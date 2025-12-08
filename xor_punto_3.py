@@ -22,7 +22,7 @@ xs = [
 ys = [Value(-1.0), Value(1.0), Value(1.0), Value(-1.0)] 
 
 print("Entrenando XOR con MLP no-lineal...")
-for k in range(100): # Esto lo voy a ir ajustando qsy
+for i in range(500): # Esto lo voy a ir ajustando qsy
     
     # 1. Forward
     ypred = [model(x) for x in xs]
@@ -41,8 +41,8 @@ for k in range(100): # Esto lo voy a ir ajustando qsy
     for p in model.parameters():
         p.data += -lr * p.grad
     
-    if k % 10 == 0:
-        print(f"Paso {k} | Pérdida: {loss.data:.4f}")
+    if i % 20 == 0:
+        print(f"Paso {i} | Pérdida: {loss.data:.4f}")
 
 print(f"Pérdida final: {loss.data:.4f}")
 print("Predicciones finales:", [y.data for y in ypred])
