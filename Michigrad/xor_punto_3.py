@@ -28,8 +28,8 @@ for i in range(500): # Esto lo voy a ir ajustando qsy
     ypred = [model(x) for x in xs]
     
     # 2. Loss
-    loss = sum((yout - ygt)**2 for yout, ygt in zip(ypred, ys))
-    
+    loss = sum((yout - ygt)**2 for yout, ygt in zip(ypred, ys)) / len(ys)
+
     # 3. Zero grad
     model.zero_grad()
     
